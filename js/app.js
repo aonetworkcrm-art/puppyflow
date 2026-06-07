@@ -1773,7 +1773,7 @@ function renderGroupSection(containerId, title, subtitle, puppies, accentColor) 
     var blk = getFeedingBlock(p.id);
     var genderIcon = p.gender === 'M' ? '♂' : '♀';
     
-    html += '<div class="funnel-puppy-row" onclick="navigateTo('perfiles')">';
+    html += '<div class="funnel-puppy-row" onclick="navigateTo(&#39;perfiles&#39;)">';
     html += '  <div class="funnel-puppy-avatar" style="background:' + p.avatarBg + ';color:' + p.avatarColor + ';">' + p.avatar + '</div>';
     html += '  <div class="funnel-puppy-info">';
     html += '    <div class="funnel-puppy-name">' + p.name + '</div>';
@@ -1784,7 +1784,7 @@ function renderGroupSection(containerId, title, subtitle, puppies, accentColor) 
     html += '    <div class="funnel-puppy-weight-value">' + (lw ? lw.value + 'g' : '—') + '</div>';
     html += '    <div class="funnel-puppy-weight-label">Peso</div>';
     html += '  </div>';
-    html += '  <button class="funnel-puppy-btn" onclick="event.stopPropagation();openPuppyDetail('' + p.id + '')">Ver →</button>';
+    html += '  <button class="funnel-puppy-btn" onclick="event.stopPropagation();openPuppyDetail(&#39;' + p.id + '&#39;)">Ver →</button>';
     html += '</div>';
   }
   html += '</div>';
