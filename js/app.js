@@ -11,7 +11,7 @@ const PUPPY_DATA = [
   { id: 'blanquita', name: 'Blanquita', gender: 'F', role: 'mother', color: 'Blanco', avatar: '🐕', avatarBg: 'rgba(46,204,113,0.15)', avatarColor: '#2ecc71', notes: 'Madre de la camada. Semi-callejera del condominio.', birthDate: null },
   { id: 'max', name: 'Max', gender: 'M', role: 'puppy', color: 'Patrón Steel', avatar: '🐶', avatarBg: 'rgba(77,171,247,0.15)', avatarColor: '#4dabf7', notes: 'Líder del Bloque A. Tranquilo.', birthDate: '2026-05-23' },
   { id: 'steel', name: 'Steel', gender: 'M', role: 'puppy', color: 'Patrón Steel', avatar: '🐶', avatarBg: 'rgba(77,171,247,0.15)', avatarColor: '#4dabf7', notes: 'Parte del Bloque A. Tranquilo como Max.', birthDate: '2026-05-23' },
-  { id: 'sydney', name: 'Sydney', gender: 'M', role: 'puppy', color: 'Marrón claro', avatar: '🐶', avatarBg: 'rgba(77,171,247,0.15)', avatarColor: '#4dabf7', notes: 'De quien se enamora Max. Bloque A.', birthDate: '2026-05-23' },
+  { id: 'sydney', name: 'Sydney', gender: 'F', role: 'puppy', color: 'Marrón claro', avatar: '🐩', avatarBg: 'rgba(232,125,158,0.15)', avatarColor: '#e87d9e', notes: 'De quien se enamora Max. Bloque A. Hembra tranquila.', birthDate: '2026-05-23' },
   { id: 'arturo', name: 'Arturo', gender: 'M', role: 'puppy', color: 'Marrón oscuro', avatar: '🐶', avatarBg: 'rgba(77,171,247,0.15)', avatarColor: '#4dabf7', notes: 'Bloque B. Es de los más grandes y fuertes.', birthDate: '2026-05-23' },
   { id: 'travieso', name: 'Travieso', gender: 'M', role: 'puppy', color: 'Pequeño dominante', avatar: '🐕', avatarBg: 'rgba(224,184,92,0.15)', avatarColor: '#e0b85c', notes: 'EL MÁS PEQUEÑO. Prioridad máxima en alimentación. Bloque B — siempre en tetas traseras de Blanquita.', birthDate: '2026-05-23' },
   { id: 'chana', name: 'Chana', gender: 'F', role: 'puppy', color: 'Blanco con manchas', avatar: '🐩', avatarBg: 'rgba(232,125,158,0.15)', avatarColor: '#e87d9e', notes: 'Bloque B. Fuerte, come bien.', birthDate: '2026-05-23' },
@@ -212,10 +212,43 @@ function loadState() {
     if (saved) {
       const parsed = JSON.parse(saved);
       const def = getDefaultState();
-      return { ...def, ...parsed };
+      var state = { ...def, ...parsed };
+      // Restore custom puppies into PUPPY_DATA
+      if (state.customPuppies && state.customPuppies.length > 0) {
+        restoreCustomPuppies(state);
+      }
+      return state;
     }
   } catch (e) {}
   return getDefaultState();
+}
+
+function restoreCustomPuppies(state) {
+  // Check if custom puppies are already in PUPPY_DATA
+  for (var ci = 0; ci < state.customPuppies.length; ci++) {
+    var cid = state.customPuppies[ci];
+    var exists = false;
+    for (var pi = 0; pi < PUPPY_DATA.length; pi++) {
+      if (PUPPY_DATA[pi].id === cid) { exists = true; break; }
+    }
+    if (!exists) {
+      // Add a placeholder - user needs to edit via modal
+      PUPPY_DATA.push({ id: cid, name: cid.charAt(0).toUpperCase() + cid.slice(1), gender: 'M', role: 'puppy', color: 'Desconocido', avatar: '\ud83d\udc36', avatarBg: 'rgba(77,171,247,0.15)', avatarColor: '#4dabf7', notes: 'Perro agregado por el usuario. Edita para completar datos.', birthDate: '2026-05-23' });
+    }
+  }
+  // Restore custom feeding blocks
+  if (state.customFeedingBlocks) {
+    for (var blk in state.customFeedingBlocks) {
+      if (FEEDING_BLOCKS[blk]) {
+        for (var mi = 0; mi < state.customFeedingBlocks[blk].members.length; mi++) {
+          var mem = state.customFeedingBlocks[blk].members[mi];
+          if (FEEDING_BLOCKS[blk].members.indexOf(mem) < 0) {
+            FEEDING_BLOCKS[blk].members.push(mem);
+          }
+        }
+      }
+    }
+  }
 }
 
 function getAppState() {
@@ -274,7 +307,7 @@ function navigateTo(section, skipHistory) {
   var navItem = document.querySelector('.nav-item[data-section="' + section + '"]');
   if (navItem) navItem.classList.add('active');
   updateBackButton();
-  var titles = { dashboard: ['Dashboard', 'Resumen general'], perfiles: ['Perfiles', 'Información individual'], pesos: ['Pesos', 'Registro de peso'], alimentacion: ['Alimentación', 'Horarios y bloques'], comidas: ['Comidas de Blanquita', 'Comida real y recetario'], medicina: ['Medicina', 'Calendario médico'], contenido: ['Contenido', 'Exportar datos'] };
+  var titles = { dashboard: ['Dashboard', 'Resumen general'], perfiles: ['Perfiles', 'Información individual'], pesos: ['Pesos', 'Registro de peso'], alimentacion: ['Alimentación', 'Horarios y bloques'], comidas: ['Comidas de Blanquita', 'Comida real y recetario'], 'bloque-a': ['Bloque A', 'Max, Steel, Sydney, Alofoka'], 'bloque-b': ['Bloque B', 'Arturo, Chana, Rodotesa, Travieso'], hembras: ['Hembras', 'Blanquita, Chana, Sydney, Alofoka, Rodotesa'], varones: ['Varones', 'Max, Steel, Arturo, Travieso'], medicina: ['Medicina', 'Calendario médico'], progresion: ['Progresión', 'Alimentación por semanas'], costos: ['Costos', 'Presupuesto de comidas'], contenido: ['Contenido', 'Exportar datos'] };
   var t = titles[section] || ['Nexus Puppy Flow', ''];
   var titleEl = document.getElementById('topbar-title');
   var breadEl = document.getElementById('topbar-breadcrumb');
@@ -289,6 +322,12 @@ function navigateTo(section, skipHistory) {
   else if (section === 'pesos') renderPesos();
   else if (section === 'alimentacion') renderAlimentacion();
   else if (section === 'comidas') renderComidas();
+  else if (section === 'bloque-a') renderBloqueA();
+  else if (section === 'bloque-b') renderBloqueB();
+  else if (section === 'hembras') renderHembras();
+  else if (section === 'varones') renderVarones();
+  else if (section === 'progresion') renderProgresion();
+  else if (section === 'costos') renderCostos();
   else if (section === 'medicina') renderMedicina();
   else if (section === 'contenido') renderContenido();
 }
@@ -1663,6 +1702,87 @@ document.addEventListener('keydown', function(e) {
 });
 
 /* ===== RENDER: CONTENIDO ===== */
+
+
+/* ===== RENDER: GRUPOS (Bloque A, Bloque B, Hembras, Varones) ===== */
+
+function getFilteredPuppies(filterType, filterValue) {
+  var result = [];
+  for (var i = 0; i < PUPPY_DATA.length; i++) {
+    var p = PUPPY_DATA[i];
+    if (filterType === 'block') {
+      var blk = getFeedingBlock(p.id);
+      if (blk === filterValue) result.push(p);
+    } else if (filterType === 'gender') {
+      if (p.gender === filterValue && p.id !== 'blanquita') result.push(p);
+    } else if (filterType === 'mother') {
+      if (p.role === 'mother') result.push(p);
+    }
+  }
+  return result;
+}
+
+function renderGroupSection(containerId, title, subtitle, puppies, accentColor) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  
+  var html = '<div class="next-feeding-banner" style="background:linear-gradient(135deg,var(--bg3),' + accentColor + '05);border-color:' + accentColor + '22;">';
+  html += '  <div>';
+  html += '    <div class="nfb-label">' + subtitle + '</div>';
+  html += '    <div class="nfb-time" style="font-size:24px;color:' + accentColor + ';">' + title + '</div>';
+  html += '    <div class="nfb-block">' + puppies.length + ' miembros</div>';
+  html += '  </div>';
+  html += '</div>';
+  
+  html += '<div class="funnel-puppies-list">';
+  for (var i = 0; i < puppies.length; i++) {
+    var p = puppies[i];
+    var lw = getLatestWeight(p.id);
+    var blk = getFeedingBlock(p.id);
+    var genderIcon = p.gender === 'M' ? '♂' : '♀';
+    
+    html += '<div class="funnel-puppy-row" onclick="navigateTo('perfiles')">';
+    html += '  <div class="funnel-puppy-avatar" style="background:' + p.avatarBg + ';color:' + p.avatarColor + ';">' + p.avatar + '</div>';
+    html += '  <div class="funnel-puppy-info">';
+    html += '    <div class="funnel-puppy-name">' + p.name + '</div>';
+    html += '    <div class="funnel-puppy-role">' + (p.role === 'mother' ? 'Mamá' : 'Cachorro') + ' ' + genderIcon + ' ' + p.color + '</div>';
+    html += '  </div>';
+    if (blk) html += '  <div class="funnel-puppy-block funnel-block-' + blk.toLowerCase() + '">Bloque ' + blk + '</div>';
+    html += '  <div class="funnel-puppy-weight">';
+    html += '    <div class="funnel-puppy-weight-value">' + (lw ? lw.value + 'g' : '—') + '</div>';
+    html += '    <div class="funnel-puppy-weight-label">Peso</div>';
+    html += '  </div>';
+    html += '  <button class="funnel-puppy-btn" onclick="event.stopPropagation();openPuppyDetail('' + p.id + '')">Ver →</button>';
+    html += '</div>';
+  }
+  html += '</div>';
+  
+  container.innerHTML = html;
+}
+
+function renderBloqueA() {
+  renderGroupSection('bloque-a-content', 'Bloque A — Los Lideres', 'Max, Steel, Sydney, Alofoka', getFilteredPuppies('block', 'A'), 'var(--info-bright)');
+}
+
+function renderBloqueB() {
+  var pups = getFilteredPuppies('block', 'B');
+  renderGroupSection('bloque-b-content', 'Bloque B — Los Fuertes + Guerrero', 'Arturo, Chana, Rodotesa, Travieso', pups, 'var(--pink)');
+}
+
+function renderHembras() {
+  // Include Blanquita at top for hembras
+  var blanquita = puppyById('blanquita');
+  var hembras = getFilteredPuppies('gender', 'F');
+  var all = [];
+  if (blanquita) all.push(blanquita);
+  for (var i = 0; i < hembras.length; i++) all.push(hembras[i]);
+  renderGroupSection('hembras-content', 'Hembras — Las Chicas', 'Blanquita, Chana, Sydney, Alofoka, Rodotesa', all, 'var(--pink)');
+}
+
+function renderVarones() {
+  renderGroupSection('varones-content', 'Varones — Los Machos', 'Max, Steel, Arturo, Travieso', getFilteredPuppies('gender', 'M'), 'var(--info-bright)');
+}
+
 
 function renderContenido() {
   var container = document.getElementById('contenido-content');

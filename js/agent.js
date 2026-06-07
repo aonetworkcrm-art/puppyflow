@@ -81,6 +81,27 @@ function detectIntent(input) {
     return { type: 'SMALLEST' };
   }
 
+  // Navegación a grupos
+  if (/bloque a|bloque A|grupo a|grupo A|los l(i|í)deres/i.test(q)) {
+    return { type: 'GO_TO_SECTION', target: 'bloque-a' };
+  }
+  if (/bloque b|bloque B|grupo b|grupo B|los fuertes/i.test(q)) {
+    return { type: 'GO_TO_SECTION', target: 'bloque-b' };
+  }
+  if (/hembras|las chicas|las hembras|perras|mujeres/i.test(q) && !/blanquita.*comida|comidas.*blanquita/i.test(q)) {
+    return { type: 'GO_TO_SECTION', target: 'hembras' };
+  }
+  if (/varones|los machos|los varones|perros|hombres/i.test(q) && !/alimentaci/i.test(q)) {
+    return { type: 'GO_TO_SECTION', target: 'varones' };
+  }
+  // Progresión / semanas
+  if (/progresi(o|ó)n|semanas|etapas|crecimiento|cachorro.*semana|alimentaci(o|ó)n.*semana|destete|papilla/i.test(q)) {
+    return { type: 'GO_TO_SECTION', target: 'progresion' };
+  }
+  // Costos / presupuesto
+  if (/costos|costo|presupuesto|cu(á|a)nto cuesta|precio|pesos dominicanos|d(op|ó)lares|RD\$/i.test(q)) {
+    return { type: 'GO_TO_SECTION', target: 'costos' };
+  }
   // Consejos / tips
   if (/consejo|tip|recomienda|qu(é|e) (deb|pued)o hacer|c(o|o)mo cuidar|qu(é|e) hacer|ayuda/i.test(q)) {
     return { type: 'TIPS' };
@@ -546,6 +567,15 @@ function generateAgentResponse(input, context) {
       };
     }
 
+    case 'GO_TO_SECTION': {
+      if (navigateTo && intent.target) {
+        navigateTo(intent.target);
+        var labels = { 'bloque-a': '🔵 Bloque A', 'bloque-b': '🩷 Bloque B', 'hembras': '♀️ Hembras', 'varones': '♂️ Varones', 'progresion': '🐛 Progresión', 'costos': '💰 Costos' };
+        var label = labels[intent.target] || intent.target;
+        return { message: 'Navegando a ' + label + '...' };
+      }
+      return { message: 'No pude navegar a esa sección.' };
+    }
     case 'UNKNOWN':
     default: {      return {
       message: `🤔 No entendí bien tu pregunta. Aquí algunas cosas que puedes preguntarme:\n\n` +
@@ -558,13 +588,19 @@ function generateAgentResponse(input, context) {
         `• "¿Quién es el más pesado?"\n` +
         `• "¿Qué eventos médicos hay?"\n` +
         `• "Dame un resumen de la camada"\n` +
+        `• "Enséñame el Bloque A"\n` +
+        `• "Ver las hembras"\n` +
+        `• "Progresión de alimentos"\n` +
+        `• "Costos de las comidas"\n` +
         `• "Tips para cuidarlos"\n\n` +
         `O dime "hola" para saludarme 😊`,
         actions: [
           { label: '📊 Resumen', action: 'BRIEFING' },
           { label: '⭐ Travieso', action: 'TRAVIESO_STATUS' },
           { label: '🍼 Próxima comida', action: 'NEXT_FEEDING' },
-          { label: '🍲 Comidas Blanquita', action: 'BLANQUITA_MEAL_STATUS' }
+          { label: '🍲 Comidas Blanquita', action: 'BLANQUITA_MEAL_STATUS' },
+          { label: '🔵 Bloque A', action: 'GO_TO_SECTION', data: { section: 'bloque-a' } },
+          { label: '♀️ Hembras', action: 'GO_TO_SECTION', data: { section: 'hembras' } }
         ]
       };
     }
