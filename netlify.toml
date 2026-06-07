@@ -5,10 +5,6 @@
 [build]
   publish = "."
 
-# ─── Site ID (for deploy script to work from any clone) ───
-[site]
-  id = "fanciful-panda-d32cde"
-
 # ─── Headers ───
 [[headers]]
   for = "/*"

@@ -11,8 +11,17 @@
 
 set -e
 
+SITE_URL="https://fanciful-panda-d32cde.netlify.app"
+SITE_ID="fanciful-panda-d32cde"
+
 echo "🐾 Nexus Puppy Flow — Deploy"
 echo "═══════════════════════════════"
+
+# Auto-link Netlify site if not linked (e.g. fresh clone)
+if [ ! -f ".netlify/state.json" ]; then
+  echo "🔗 Vinculando con Netlify (site: $SITE_ID)..."
+  npx netlify link --id "$SITE_ID"
+fi
 
 # Verificar que hay cambios para commitear
 if git diff --quiet && git diff --cached --quiet; then
@@ -20,7 +29,7 @@ if git diff --quiet && git diff --cached --quiet; then
   echo ""
   echo "🚀 Desplegando a Netlify..."
   netlify deploy --prod --dir=.
-  echo "✅ Deploy completado: https://fanciful-panda-d32cde.netlify.app"
+  echo "✅ Deploy completado: $SITE_URL"
   exit 0
 fi
 
@@ -36,7 +45,7 @@ echo "✅ Push a GitHub completado"
 echo ""
 echo "🚀 Desplegando a Netlify..."
 netlify deploy --prod --dir=. --message "Deploy $(date '+%Y-%m-%d %H:%M')"
-echo "✅ Deploy completado: https://fanciful-panda-d32cde.netlify.app"
+echo "✅ Deploy completado: $SITE_URL"
 
 echo ""
 echo "🎉 ¡Todo listo!"
