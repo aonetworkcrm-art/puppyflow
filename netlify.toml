@@ -1,0 +1,27 @@
+# ═══════════════════════════════════════════════
+# NEXUS PUPPY FLOW — Netlify Configuration
+# ═══════════════════════════════════════════════
+
+[build]
+  publish = "."
+
+# ─── Headers ───
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Service Worker needs broad scope
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Service-Worker-Allowed = "/"
+
+# ─── Redirects ───
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

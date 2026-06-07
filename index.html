@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus Puppy Flow</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar Compacta -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">🐾</div>
+        <div class="sidebar-brand-text">
+          <span class="brand-name">Nexus Puppy</span>
+          <span class="brand-sub">Blanquita & Los 8</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-item active" data-section="dashboard" onclick="navigateTo('dashboard')" data-label="Dashboard">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Dashboard</span>
+        </div>
+        <div class="nav-item" data-section="perfiles" onclick="navigateTo('perfiles')" data-label="Perfiles">
+          <span class="nav-icon">🐶</span>
+          <span class="nav-label">Perfiles</span>
+        </div>
+        <div class="nav-item" data-section="pesos" onclick="navigateTo('pesos')" data-label="Pesos">
+          <span class="nav-icon">⚖️</span>
+          <span class="nav-label">Pesos</span>
+        </div>
+        <div class="nav-item" data-section="alimentacion" onclick="navigateTo('alimentacion')" data-label="Alimentación">
+          <span class="nav-icon">🍼</span>
+          <span class="nav-label">Alimentación</span>
+        </div>
+        <div class="nav-item" data-section="comidas" onclick="navigateTo('comidas')" data-label="Comidas Blanquita">
+          <span class="nav-icon">🍲</span>
+          <span class="nav-label">Comidas Blanquita</span>
+        </div>
+        <div class="nav-item" data-section="medicina" onclick="navigateTo('medicina')" data-label="Medicina">
+          <span class="nav-icon">💉</span>
+          <span class="nav-label">Medicina</span>
+        </div>
+        <div class="nav-item" data-section="contenido" onclick="navigateTo('contenido')" data-label="Contenido">
+          <span class="nav-icon">📱</span>
+          <span class="nav-label">Contenido</span>
+        </div>
+      </nav>
+      <div class="sidebar-footer">Nexus Puppy Flow v2.0</div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Topbar -->
+      <div class="topbar">
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+        <div class="topbar-left">
+          <button class="back-btn" id="back-btn" onclick="goBack()" title="Atrás (Alt+←)" style="display:none;">←</button>
+          <div class="topbar-title" id="topbar-title">Dashboard</div>
+          <div class="topbar-breadcrumb" id="topbar-breadcrumb">Hub Central</div>
+        </div>
+        <div class="topbar-right">
+          <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
+          <div class="us-container" id="us-container">
+            <input class="us-input" id="us-input" type="text" placeholder="Buscar..." oninput="universalSearch(this.value)" onfocus="universalSearch(this.value)">
+            <button class="us-clear" id="us-clear" onclick="clearUniversalSearch()">✕</button>
+            <div class="us-dropdown" id="us-dropdown"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sections -->
+      <div class="page-content">
+        <div class="section active" id="section-dashboard"><div id="dashboard-content"></div></div>
+        <div class="section" id="section-perfiles"><div id="perfiles-content"></div></div>
+        <div class="section" id="section-pesos"><div id="pesos-content"></div></div>
+        <div class="section" id="section-alimentacion"><div id="alimentacion-content"></div></div>
+        <div class="section" id="section-comidas"><div id="comidas-content"></div></div>
+        <div class="section" id="section-medicina"><div id="medicina-content"></div></div>
+        <div class="section" id="section-contenido"><div id="contenido-content"></div></div>
+      </div>
+
+      <!-- Modal -->
+      <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+          <div class="modal-header">
+            <span class="modal-title" id="modal-title"></span>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+          </div>
+          <div class="modal-body" id="modal-body"></div>
+          <div class="modal-footer" id="modal-footer"></div>
+        </div>
+      </div>
+    </div>
+    <!-- End .main-content -->
+  </div>
+  <!-- End .app-layout -->
+
+  <div class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
+
+  <!-- Chat FAB -->
+  <div class="chat-fab" id="chat-fab" onclick="toggleChat()">
+    <span>💬</span>
+  </div>
+
+  <!-- Chat Panel -->
+  <div class="chat-panel" id="chat-panel">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <span class="chat-avatar">🐾</span>
+        <div>
+          <div class="chat-agent-name">Nexus — Agente</div>
+          <div class="chat-agent-status">🟢 En línea</div>
+        </div>
+      </div>
+      <div class="chat-header-actions">
+        <button class="chat-btn-icon" onclick="clearConversationHistory()" title="Limpiar">🧹</button>
+        <button class="chat-btn-icon" onclick="showChatHelp()" title="Ayuda">❓</button>
+        <button class="chat-btn-icon" onclick="toggleChat()" title="Cerrar">✕</button>
+      </div>
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input-area">
+      <input class="chat-input" id="chat-input" type="text" placeholder="Escribe..." onkeydown="if(event.key==='Enter') sendChatMessage()" autocomplete="off">
+      <button class="chat-send-btn" onclick="sendChatMessage()">➤</button>
+    </div>
+  </div>
+
+  <div id="content-preview-area" style="display:none;"></div>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/agent.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/api-client.js"></script>
+  <script src="js/data-panel.js"></script>
+</body>
+</html>

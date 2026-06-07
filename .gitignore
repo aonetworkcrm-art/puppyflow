@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# Backend
+backend/__pycache__/
+backend/*.pyc
+backend/NUL
+
+# Databases (local copies)
+*.db
+backend/nexus_puppy.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Netlify
+.netlify/
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
