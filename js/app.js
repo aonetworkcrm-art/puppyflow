@@ -34,15 +34,47 @@ const FEEDING_TIMES = [
 ];
 
 const MEDICAL_EVENTS = [
-  { id: 'desp1', title: '1ra Desparasitación Interna', desc: 'Pamoato de Pirantel en jarabe. Pesar a cada cachorro para dosis exacta.', date: '2026-06-13', type: 'deworming', status: 'pending', forPuppies: true },
-  { id: 'desp2', title: '2da Desparasitación Interna', desc: 'Repetir dosis de Pamoato de Pirantel.', date: '2026-06-28', type: 'deworming', status: 'pending', forPuppies: true },
-  { id: 'vac1', title: '1ra Vacuna Puppy (Parvovirus + Moquillo)', desc: '¡LA MÁS IMPORTANTE! Vacuna puppy combinada.', date: '2026-07-07', type: 'vaccine', status: 'pending', forPuppies: true },
-  { id: 'desp3', title: '3ra Desparasitación Interna', desc: 'Refuerzo de desparasitación oral.', date: '2026-07-13', type: 'deworming', status: 'pending', forPuppies: true },
-  { id: 'desp4', title: '4ta Desparasitación Interna', desc: 'Última desparasitación oral programada.', date: '2026-07-28', type: 'deworming', status: 'pending', forPuppies: true },
-  { id: 'vac2', title: '2da Vacuna Puppy (Refuerzo)', desc: 'Refuerzo de la vacuna puppy.', date: '2026-08-07', type: 'vaccine', status: 'pending', forPuppies: true },
-  { id: 'rabia', title: 'Vacuna Antirrábica', desc: 'A partir de los 3 meses de edad.', date: '2026-08-23', type: 'vaccine', status: 'pending', forPuppies: true },
-  { id: 'bath1', title: 'Primer Baño Oficial', desc: 'Los cachorros pueden bañarse con agua tibia a partir de los 2 meses. Usar champú suave.', date: '2026-07-23', type: 'bath', status: 'pending', forPuppies: true },
-  { id: 'blanquita-check', title: 'Revisión Blanquita — Signos de Mastitis', desc: 'Revisar tetas: ¿calientes, duras o moradas? Signos de mastitis. Si presenta síntomas, llevar al veterinario URGENTE.', date: '2026-06-07', type: 'checkup', status: 'pending', forPuppies: false }
+  // ===== SEMANA 1-2 (Nacimiento - Dia 14) =====
+  { id: 'check-ojos', title: 'Apertura de Ojos', desc: 'Los cachorros empiezan a abrir los ojos entre los días 10-14. NO forzar. Si no abren al día 14, limpiar suavemente con gasa y agua tibia.', date: '2026-06-03', type: 'milestone', status: 'pending', forPuppies: true, icon: '👀' },
+  { id: 'check-oidos', title: 'Apertura de Oídos', desc: 'Los oídos se abren entre los días 13-17. Empiezan a reaccionar al sonido.', date: '2026-06-06', type: 'milestone', status: 'pending', forPuppies: true, icon: '👂' },
+  { id: 'unas-1', title: 'Corte de Uñas #1', desc: 'Primer corte de uñas. Usar cortaúñas para cachorros. Las uñas curvas lastiman a Blanquita al amamantar.', date: '2026-06-07', type: 'grooming', status: 'pending', forPuppies: true, icon: '🐾' },
+  { id: 'blanquita-check', title: 'Revisión Blanquita — Signos de Mastitis', desc: 'REVISAR DIARIO. Tetas: ¿calientes, duras o moradas? ¿Blanquita come bien? Si hay fiebre o letargo → veterinario URGENTE.', date: '2026-06-07', type: 'checkup', status: 'pending', forPuppies: false, icon: '👑' },
+
+  // ===== SEMANA 3 (Dias 15-21) =====
+  { id: 'desp1', title: '1ra Desparasitación Interna (Día 15-21)', desc: 'Pamoato de Pirantel en jarabe única dosis. Pesar a CADA cachorro para dosis exacta (aprox 5-10mg/kg). ¡No olvidar a Travieso!', date: '2026-06-13', type: 'deworming', status: 'pending', forPuppies: true, icon: '💊', cost: 'RD50-250' },
+  { id: 'unas-2', title: 'Corte de Uñas #2', desc: 'Segundo corte. Siguen creciendo rápido. Revisar cada 5-7 días.', date: '2026-06-14', type: 'grooming', status: 'pending', forPuppies: true, icon: '🐾' },
+  { id: 'inicio-papilla', title: 'INICIO PAPILLA (Día 21-25)', desc: 'HITO IMPORTANTE. Iniciar papilla de transición: leche maternizada + agua tibia (textura muy líquida). 1-2 veces/día. Observar si comen.', date: '2026-06-13', type: 'milestone', status: 'pending', forPuppies: true, icon: '🍽️' },
+
+  // ===== SEMANA 4 (Dias 22-28) =====
+  { id: 'desp2', title: '2da Desparasitación Interna', desc: 'Repetir dosis de Pamoato de Pirantel. Pesar para dosis exacta. Travieso prioridad.', date: '2026-06-28', type: 'deworming', status: 'pending', forPuppies: true, icon: '💊', cost: 'RD50-250' },
+  { id: 'dientes', title: 'Salida de Dientes de Leche', desc: 'Los primeros dientes empiezan a salir. Blanquita puede sentir molestia al amamantar. Revisar encías.', date: '2026-06-20', type: 'milestone', status: 'pending', forPuppies: true, icon: '🦷' },
+  { id: 'agua', title: 'Introducir Agua', desc: 'Colocar un plato pequeño con agua limpia. Empiezan a beber agua solos.', date: '2026-06-20', type: 'milestone', status: 'pending', forPuppies: true, icon: '💧' },
+
+  // ===== SEMANA 5 (Dias 29-35) =====
+  { id: 'papilla-espesa', title: 'Papilla más espesa + Sólidos', desc: 'Aumentar consistencia de papilla: pollo cocido desmenuzado + arroz + auyama. Empiezan a masticar.', date: '2026-06-23', type: 'milestone', status: 'pending', forPuppies: true, icon: '🍖' },
+  { id: 'vetsalud-1', title: 'Control Veterinario General #1', desc: 'Revisión general: peso, hidratación, ojos, oídos, y valoración de salud de la camada.', date: '2026-06-25', type: 'checkup', status: 'pending', forPuppies: true, icon: '🔍', cost: 'RD00-1500' },
+
+  // ===== SEMANA 6-7 (Dias 36-49) =====
+  { id: 'desp3', title: '3ra Desparasitación Interna', desc: 'Refuerzo de desparasitación oral. Previo a la vacuna puppy.', date: '2026-07-13', type: 'deworming', status: 'pending', forPuppies: true, icon: '💊', cost: 'RD50-250' },
+  { id: 'vac1', title: '1ra Vacuna Puppy (Parvovirus + Moquillo + Adenovirus)', desc: '¡LA VACUNA MÁS IMPORTANTE! Vacuna polivalente (V8 o V10). Se aplica a los 45 días de edad. No bañar 7 días antes/después.', date: '2026-07-07', type: 'vaccine', status: 'pending', forPuppies: true, icon: '💉', cost: 'RD00-1200 c/u' },
+  { id: 'socializacion', title: 'Inicio de Socialización', desc: 'Ya pueden interactuar más con humanos. Exponer a sonidos suaves, texturas, y caricias de diferentes personas.', date: '2026-07-01', type: 'milestone', status: 'pending', forPuppies: true, icon: '🧠' },
+  { id: 'banho-seco', title: 'Primer Baño en Seco (Alternativa)', desc: 'Si están muy sucios, usar champú en seco o toallitas húmedas para perros. NO mojar hasta 2 semanas post-vacuna.', date: '2026-07-05', type: 'bath', status: 'pending', forPuppies: true, icon: '🧼' },
+
+  // ===== SEMANA 8-9 (Dias 50-63) =====
+  { id: 'desp4', title: '4ta Desparasitación Interna', desc: 'Última desparasitación oral programada del plan básico.', date: '2026-07-28', type: 'deworming', status: 'pending', forPuppies: true, icon: '💊', cost: 'RD50-250' },
+  { id: 'bath1', title: 'Primer Baño Oficial con Agua', desc: 'Ya pueden bañarse con agua tibia (37°C). Usar champú suave para cachorros. Secar COMPLETAMENTE. No exponer a corrientes.', date: '2026-07-23', type: 'bath', status: 'pending', forPuppies: true, icon: '🛁' },
+  { id: 'destete-completo', title: 'DESTETE COMPLETO (Semana 8)', desc: 'Los cachorros ya comen sólidos 100%. Blanquita puede empezar a distanciarse. Comida de cachorro 4 veces/día.', date: '2026-07-20', type: 'milestone', status: 'pending', forPuppies: true, icon: '✅' },
+
+  // ===== SEMANA 10-12 (Dias 64-90) =====
+  { id: 'vac2', title: '2da Vacuna Puppy (Refuerzo)', desc: 'Refuerzo de la vacuna polivalente. Se aplica 3-4 semanas después de la primera. NO bañar 7 días.', date: '2026-08-07', type: 'vaccine', status: 'pending', forPuppies: true, icon: '💉', cost: 'RD00-1200 c/u' },
+  { id: 'desp-externa-1', title: '1ra Desparasitación Externa', desc: 'Aplicar pipeta o collar antipulgas/garrapatas. Producto APTO para cachorros (ej: Frontline, Advocate).', date: '2026-08-01', type: 'deworming', status: 'pending', forPuppies: true, icon: '💊', cost: 'RD00-500 c/u' },
+  { id: 'vetsalud-2', title: 'Control Veterinario General #2', desc: 'Última revisión médica antes de la entrega. Certificado de salud. Desparasitación externa.', date: '2026-08-10', type: 'checkup', status: 'pending', forPuppies: true, icon: '🔍', cost: 'RD00-1500' },
+
+  // ===== MES 3+ (Dias 91+) =====
+  { id: 'rabia', title: 'Vacuna Antirrábica (3 meses+)', desc: 'A partir de los 3 meses de edad (aprox 23 agosto). OBLIGATORIA por ley en República Dominicana.', date: '2026-08-23', type: 'vaccine', status: 'pending', forPuppies: true, icon: '💉', cost: 'RD00-800 c/u' },
+  { id: 'microchip', title: 'Microchip (Opcional)', desc: 'Microchip de identificación subcutáneo. Muy recomendado. Se coloca entre los omóplatos.', date: '2026-08-25', type: 'other', status: 'pending', forPuppies: true, icon: '🏷️', cost: 'RD00-1200 c/u' },
+  { id: 'esterilizacion', title: 'Esterilización/Castración (4-6 meses)', desc: 'RECOMENDADO a los 4-6 meses de edad. Previene camadas no deseadas y problemas de salud. Consultar con veterinario.', date: '2026-09-23', type: 'other', status: 'pending', forPuppies: true, icon: '🏥', cost: 'RD500-3000 c/u' },
+  { id: 'recordatorio-vacunas', title: 'Recordatorio: Refuerzo Anual de Vacunas', desc: 'Las vacunas se refuerzan anualmente. Programar recordatorio para Junio 2027.', date: '2027-06-07', type: 'vaccine', status: 'pending', forPuppies: true, icon: '📅' },
 ];
 
 /* ===== BLANQUITA REAL FOOD ===== */
