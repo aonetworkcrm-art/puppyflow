@@ -201,7 +201,7 @@ function getBlanquitaMealsToday() {
 const STORAGE_KEY = 'nexus_puppy_flow';
 
 function getDefaultState() {
-  return { weights: {}, feedings: {}, medicalStatus: {}, puppyNotes: {}, customEvents: [], blanquitaMeals: {}, blanquitaReminders: { enabled: false, minutesBefore: 5 }, conversationHistory: [], lastUpdated: Date.now() };
+  return { weights: {}, feedings: {}, medicalStatus: {}, puppyNotes: {}, customEvents: [], customPuppies: [], customFeedingBlocks: {}, blanquitaMeals: {}, blanquitaReminders: { enabled: false, minutesBefore: 5 }, conversationHistory: [], lastUpdated: Date.now() };
 }
 
 let _appState = null;
