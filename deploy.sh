@@ -20,7 +20,7 @@ echo "════════════════════════�
 # Auto-link Netlify site if not linked (e.g. fresh clone)
 if [ ! -f ".netlify/state.json" ]; then
   echo "🔗 Vinculando con Netlify (site: $SITE_ID)..."
-  npx netlify link --id "$SITE_ID"
+  netlify link --id "$SITE_ID"
 fi
 
 # Verificar que hay cambios para commitear
